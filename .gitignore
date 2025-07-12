@@ -1,0 +1,12 @@
+# test log file
+test.log
+
+# pixi environments
+.pixi
+*.egg-info
+
+## Python gitignore: https://github.com/github/gitignore/blob/main/Python.gitignore
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class

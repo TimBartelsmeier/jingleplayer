@@ -1,0 +1,1 @@
+These example jingle files have been generated using <https://luvvoice.com/> (language: English (United States) / Voice: Guy (Male))

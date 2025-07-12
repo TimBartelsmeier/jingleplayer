@@ -1,0 +1,57 @@
+{
+    "config_version": "1.0",
+    "default_delay": "0.5s",
+    "playlists": {
+        "Global Top 50": {
+            "uri": "spotify:playlist:37i9dQZEVXbMDoHDwVN2tF",
+            "announcement_file": "../example/announce playlist1.mp3"
+        },
+        "Germany Top 50": {
+            "uri": "spotify:playlist:37i9dQZEVXbJiZcmkrIHGU",
+            "announcement_file": "../example/announce playlist2.mp3"
+        }
+    },
+    "games": {
+        "Past game": {
+            "start": {
+                "relative_to": "NOW",
+                "offset": "-5m"
+            },
+            "duration": "30s",
+            "playlist": "Global Top 50"
+        },
+        "Running Game": {
+            "start": {
+                "relative_to": "NOW",
+                "offset": "-20s"
+            },
+            "duration": "30s",
+            "playlist": "Global Top 50"
+        },
+        "Future Game": {
+            "start": {
+                "relative_to": "END OF GAME: Running Game",
+                "offset": "10s"
+            },
+            "duration": "30s",
+            "announcement_file": "../example/announce game.mp3",
+            "playlist": "Germany Top 50"
+        }
+    },
+    "jingles": {
+        "Start": {
+            "audio_file": "../example/jingle start.mp3",
+            "trigger": "game_start",
+            "actions": "play jingle; wait 2s; switch to game playlist"
+        },
+        "5s left": {
+            "audio_file": "../example/jingle 5s left.mp3",
+            "trigger": "game_end",
+            "offset": "-5s"
+        },
+        "Stop": {
+            "audio_file": "../example/jingle stop.mp3",
+            "trigger": "game_end"
+        }
+    }
+}

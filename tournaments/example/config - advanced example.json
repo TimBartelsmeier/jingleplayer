@@ -1,0 +1,52 @@
+{
+    "config_version": "1.0",
+    "default_delay": "5s",
+    "playlists": {
+        "Playlist 1": {
+            "uri": "spotify:playlist:37i9dQZEVXbMDoHDwVN2tF",
+            "announcement_file": "../example/announce playlist1.mp3"
+        },
+        "Playlist 2": {
+            "uri": "spotify:playlist:37i9dQZEVXbJiZcmkrIHGU",
+            "announcement_file": "../example/announce playlist2.mp3"
+        }
+    },
+    "games": {
+        "Game 1": {
+            "start": "2025-01-01 12:00",
+            "end": "2025-01-01 13:00",
+            "announcement_file": "./announce game.mp3",
+            "playlist": "Playlist 1"
+        },
+        "Game 2": {
+            "start": {
+                "relative_to": "END OF GAME: Game 1",
+                "offset": "15m"
+            },
+            "duration": "1h",
+            "announcement_file": "./announce game.mp3",
+            "playlist": "Playlist 2"
+        }
+    },
+    "jingles": {
+        "Start": {
+            "audio_file": "jingle start.mp3",
+            "trigger": "game_start",
+            "pre_actions": "pause playback; wait 2s; announce game; wait 10s",
+            "actions": "play jingle; wait 10s; announce game playlist; switch to game playlist"
+        },
+        "5min left": {
+            "audio_file": "jingle 5min left.mp3",
+            "trigger": "game_end",
+            "offset": "-5m",
+            "pre_actions": "do nothing",
+            "actions": "play jingle"
+        },
+        "Stop": {
+            "audio_file": "jingle stop.mp3",
+            "trigger": "game_end",
+            "pre_actions": "pause playback; wait 10s",
+            "actions": "play jingle"
+        }
+    }
+}

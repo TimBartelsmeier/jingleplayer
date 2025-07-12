@@ -1,0 +1,144 @@
+{
+    "$schema": "https://json-schema.org/draft-07/schema",
+    "type": "object",
+    "definitions": {
+        "game_startend": {
+            "oneOf": [
+                {
+                    "type": "string"
+                },
+                {
+                    "type": "object",
+                    "properties": {
+                        "relative_to": {
+                            "type": "string"
+                        },
+                        "offset": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "relative_to"
+                    ],
+                    "additionalProperties": false
+                }
+            ]
+        },
+        "game": {
+            "type": "object",
+            "properties": {
+                "start": {
+                    "$ref": "#/definitions/game_startend"
+                },
+                "end": {
+                    "$ref": "#/definitions/game_startend"
+                },
+                "duration": {
+                    "type": "string"
+                },
+                "announcement_file": {
+                    "type": "string"
+                },
+                "playlist": {
+                    "type": "string"
+                }
+            },
+            "oneOf": [
+                {
+                    "required": [
+                        "start",
+                        "end"
+                    ]
+                },
+                {
+                    "required": [
+                        "start",
+                        "duration"
+                    ]
+                }
+            ],
+            "additionalProperties": false
+        },
+        "jingle_trigger": {
+            "type": "string",
+            "enum": [
+                "game_start",
+                "game_end"
+            ]
+        },
+        "jingle_actions_spec": {
+            "type": "string"
+        },
+        "jingle": {
+            "type": "object",
+            "properties": {
+                "audio_file": {
+                    "type": "string"
+                },
+                "trigger": {
+                    "$ref": "#/definitions/jingle_trigger"
+                },
+                "offset": {
+                    "type": "string"
+                },
+                "pre_actions": {
+                    "$ref": "#/definitions/jingle_actions_spec"
+                },
+                "actions": {
+                    "$ref": "#/definitions/jingle_actions_spec"
+                }
+            },
+            "required": [
+                "trigger"
+            ],
+            "additionalProperties": false
+        },
+        "spotify_playlist": {
+            "type": "object",
+            "properties": {
+                "uri": {
+                    "type": "string"
+                },
+                "announcement_file": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "uri"
+            ],
+            "additionalProperties": false
+        }
+    },
+    "properties": {
+        "config_version": {
+            "const": "1.0"
+        },
+        "default_delay": {
+            "type": "string"
+        },
+        "playlists": {
+            "type": "object",
+            "additionalProperties": {
+                "$ref": "#/definitions/spotify_playlist"
+            }
+        },
+        "games": {
+            "type": "object",
+            "additionalProperties": {
+                "$ref": "#/definitions/game"
+            }
+        },
+        "jingles": {
+            "type": "object",
+            "additionalProperties": {
+                "$ref": "#/definitions/jingle"
+            }
+        }
+    },
+    "required": [
+        "config_version",
+        "games",
+        "jingles"
+    ],
+    "additionalProperties": false
+}

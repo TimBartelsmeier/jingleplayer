@@ -1,0 +1,31 @@
+{
+    "config_version": "1.0",
+    "games": {
+        "Game 1": {
+            "start": "2025-01-01 12:00",
+            "end": "2025-01-01 13:00"
+        },
+        "Game 2": {
+            "start": {
+                "relative_to": "END OF GAME: Game 1",
+                "offset": "15m"
+            },
+            "duration": "1h"
+        }
+    },
+    "jingles": {
+        "Start": {
+            "audio_file": "jingle start.mp3",
+            "trigger": "game_start"
+        },
+        "5min left": {
+            "audio_file": "jingle 5min left.mp3",
+            "trigger": "game_end",
+            "offset": "-5m"
+        },
+        "Stop": {
+            "audio_file": "jingle stop.mp3",
+            "trigger": "game_end"
+        }
+    }
+}
