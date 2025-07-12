@@ -63,7 +63,7 @@ Two more points for the sake of completeness (you probably won’t need these): 
 ### Test modes
 To check whether everything works before using the program, e.g. ...
 - ... whether all games & jingles are set up properly;
-- ... whether all audio files (jingles, announcements, ...) play properly, have an appropriate volume, ...;
+- ... whether all audio files (jingles, announcements, ...) play properly, have an appropriate volume, etc.;
 - ... whether playback control works;
 
 you can use the built-in test mode(s). To test everything, simple call the program as you would do for your actual usage and add `--test`. See `--help` for more details.
@@ -99,7 +99,7 @@ Games have a `start` and an `end`, both of which are `datetime` objects, meaning
   }
   ```
 
-  The format is `%Y-%m-%d %H:%M` (with [these](https://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes) format codes). If you need second-level specification, `%Y-%m-%d %H:%M:%S` is also accepted.
+  The format is `%Y-%m-%d %H:%M` (with [these](https://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes) format codes). If you need accuracy to the second, `%Y-%m-%d %H:%M:%S` is also accepted.
 
 - relative `start` and `duration` instead of `end`:
 
@@ -225,12 +225,12 @@ Technical note: In reality, the scheduling might be off by a little bit due to t
 - It is assumed that there is no overhead to execution, i.e. that `wait` takes exactly the specified time; `play jingle`, `announce game` and `announce game playlist` take exactly as long as the played audio file; and all other actions are instantenous.
 - The determined duration of audio files might be rounded and differ slightly from the actual time required to play the file.
   
-The difference will probably be _very_ small (I assume ms-scale - if you do something that requires that much precision, you should probably use a different program anyway). Nevertheless, the program includes a small workaround to compensate for this: trailing `wait` actions are used to calculate when to start with the `pre_actions`, but are not actually executed. (`wait`s that are not at the end of `pre_actions` or `actions` are executed as expected.) In the example above, the announcement file is played exactly 7 seconds before the jingle should be played. If, due to the inaccuracies listed above, it takes 5 seconds and 100 ms to play it(instead of the expected 5 seconds), the jingle will still play at the expected time and the planned 2 second delay becomes a 1.9 second delay.
+The difference will probably be _very_ small (I assume milliseconds - if you do something that requires that much precision, you should probably use a different program anyway). Nevertheless, the program includes a small workaround to compensate for this: trailing `wait` actions are used to calculate when to start with the `pre_actions`, but are not actually executed. (`wait`s that are not at the end of `pre_actions` or `actions` are executed as expected.) In the example above, the announcement file is played exactly 7 seconds before the jingle should be played. If, due to the inaccuracies listed above, it takes 5 seconds and 100 ms to play it (instead of the expected 5 seconds), the jingle will still play at the expected time and the planned 2 second delay becomes a 1.9 second delay.
 
 ### Spotify URIs
 To determine the URI for a Spotify playlist, do the following:
-1. In the desktop client or the web client on a desktop device, right click on the playlist's title and select "Share" -> "Copy link to playlist". In the mobile apps, select "Copy link" from the share menu (accessible from the the three-dots menu under the playlist's title). This will give you the URL (notice the L instead of an I at the end), e.g. <https://open.spotify.com/playlist/37i9dQZEVXbMDoHDwVN2tF?si=49f49b8a79fa41eb> for the "Global Top 50" playlist.
-2. From this URL, select the identifier part, which is the combination and letters between `playlist/` and `?si=`. For the example playlist from the previous step, this is `37i9dQZEVXbMDoHDwVN2tF`.
+1. In the desktop client or the web client on a desktop device, right click on the playlist's title and select "Share" -> "Copy link to playlist". In the mobile apps, select "Copy link" from the share menu (accessible from the the three-dots menu under the playlist's title). This will give you the UR*L* (not the UR*I*!), e.g. <https://open.spotify.com/playlist/37i9dQZEVXbMDoHDwVN2tF?si=49f49b8a79fa41eb> for the "Global Top 50" playlist.
+2. From this URL, select the identifier part, which is the combination of numbers and letters between `playlist/` and `?si=`. For the example playlist from the previous step, this is `37i9dQZEVXbMDoHDwVN2tF`.
 3. The playlist's URI is `spotify:playlist:{identifier}`, e.g. `spotify:playlist:37i9dQZEVXbMDoHDwVN2tF`.
 
 The URI obtained in step 3 is what you need to set as a playlist's `uri` property to have the playlist start playing on a `switch to game playlist` action. If you specify the URL obtained in step 1 instead, the Spotify client will only display the playlist's page and stop playing music instead. You can also have a look at [Spotify's web API documentation](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids) for more information on the different parameter types.
