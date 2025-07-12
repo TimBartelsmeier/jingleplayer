@@ -168,6 +168,8 @@ You can select when a jingle should be played using a `trigger` and an `offset` 
 
 "Start" is played at the start of each game, "5min left" when there are 5 minutes left on the clock, and "End" at the end of each game.
 
+If the trigger time for a jingle/game combination has already passed when the program starts, it will simply be ignored. This lets you (re)start the program anytime during the tournament (even on the next day for multi-day tournaments) and the next jingle(s) will play at the correct time(s).
+
 ## Advanced configuration
 You can customize which actions to do for each jingle. This also allows you to do things like, for example,
 - fine-grained control over music playback, e.g. let one specific jingle play without pausing the music or only pause  playback beforehand and do not resume afterwards,
