@@ -18,13 +18,13 @@ This program works best on Linux. On Windows, it can only control music playback
 To get the more advanced options/features possible on Linux on Windows, you can try running the program through [`WSL` (Windows Subsystem for Linux)](https://learn.microsoft.com/en-us/windows/wsl/setup/environment). I haven’t tested this extensively, but based on my initial tests (Ubuntu, [Spotify installed via `snap`](https://www.spotify.com/de/download/linux/)), it should work as long as you run both the program and Spotify through WSL.
 
 ## Usage
-To use the program, open a shell in the installation folder (like you did [during the installation](#installation)). The basic command structure is 
+To use the program, open a shell in the installation folder (like you did [during the installation](#installation)). The basic command structure is
 
 ```bash
 pixi run python -m jingleplayer "{configfile}" {options}
 ```
 
-`{configfile}` is replaced with the path (absolute or relative to the installation folder) to tournament's configuration file (how to set up a configuration file is explained [below](#basic-configuration)). 
+`{configfile}` is replaced with the path (absolute or relative to the installation folder) to tournament's configuration file (how to set up a configuration file is explained [below](#basic-configuration)).
 
 `{options}` are additional options (separated by spaced) you can provide. Typically, you'll probably want to use at least one option for playback control (explained in the [next section](#playback-control)) and, before you actually use the program, test whether everything is set up correctly and works as expected (explained in the [section after the next](#test-modes)). There are also some additional advanced options available, such as setting up a log file. To see the full list, run `pixi run python -m jingleplayer --help`.
 
