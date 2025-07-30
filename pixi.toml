@@ -4,8 +4,6 @@ name = "jingleplayer"
 platforms = ["win-64", "linux-64"]
 version = "0.1.0"
 
-[tasks]
-
 [dependencies]
 python = ">=3.13.3,<3.14"
 jsonschema = ">=4.23.0,<5"
