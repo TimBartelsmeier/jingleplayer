@@ -245,6 +245,7 @@ This is a list of potential improvements and features. If any of these would be 
   - More information / "nicer" text UI for the scheduling mode
 
 - QoL features:
+  - Test mode: show timeline of all scheduled jingle events (for debugging)
   - Load games from iCal-files
   - Additional jingle trigger: half-time
   - Option(s) to skip warning/info messages (e.g. when no playback controller is passed)
