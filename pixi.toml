@@ -24,3 +24,6 @@ ruff = ">=0.11.11"
 
 [environments]
 dev = ["lint"]
+
+[tasks]
+debugconfig = "python -m jingleplayer \"./tournaments/example/config - for testing.json\" --logfile ./test.log --loglevel debug -p dummy"
