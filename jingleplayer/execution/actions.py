@@ -6,17 +6,17 @@ from jingleplayer import util
 from jingleplayer.configuration import (
     Action,
     ActionGroup,
-    Game,
+    Event,
     Jingle,
 )
 from jingleplayer.configuration.actions import (
-    AnnounceGameAction,
+    AnnounceEventAction,
     DelayAction,
     NothingAction,
     PausePlaybackAction,
     PlayJingleAction,
     ResumePlaybackAction,
-    SwitchToGamePlaylistAction,
+    SwitchToEventPlaylistAction,
 )
 from jingleplayer.playback_control import (
     PlaybackController,
@@ -27,7 +27,7 @@ from jingleplayer.playback_control import (
 def get_action_duration(
     action: Action,
     jingle: Jingle,
-    game: Game,
+    event: Event,
 ) -> timedelta:
     match action:
         case NothingAction() | PausePlaybackAction() | ResumePlaybackAction():
@@ -42,17 +42,17 @@ def get_action_duration(
 
             return timedelta(0)
 
-        case AnnounceGameAction():
-            if dur := game.announcement_duration:
+        case AnnounceEventAction():
+            if dur := event.announcement_duration:
                 return dur
             else:
                 return timedelta(0)
 
-        case SwitchToGamePlaylistAction():
+        case SwitchToEventPlaylistAction():
             return timedelta(0)
 
-        case AnnounceGameAction():
-            if (pl := game.playlist) and (dur := pl.announcement_duration):
+        case AnnounceEventAction():
+            if (pl := event.playlist) and (dur := pl.announcement_duration):
                 return dur
 
             return timedelta(0)
@@ -64,10 +64,10 @@ def get_action_duration(
 def get_actiongroup_duration(
     actiongroup: ActionGroup,
     jingle: Jingle,
-    game: Game,
+    event: Event,
 ) -> timedelta:
     return reduce(
-        lambda acc, a: acc + get_action_duration(a, jingle, game),
+        lambda acc, a: acc + get_action_duration(a, jingle, event),
         actiongroup.actions,
         timedelta(0),
     )
@@ -76,7 +76,7 @@ def get_actiongroup_duration(
 def execute_action(
     action: Action,
     jingle: Jingle,
-    game: Game,
+    event: Event,
     playback_controllers: Iterable[PlaybackController],
 ):
     match action:
@@ -99,20 +99,20 @@ def execute_action(
                 assert jingle.audiofile
                 util.play_audiofile(jingle.audiofile)
 
-        case AnnounceGameAction():
-            if f := game.announcement_file:
+        case AnnounceEventAction():
+            if f := event.announcement_file:
                 util.play_audiofile(f)
 
-        case SwitchToGamePlaylistAction():
+        case SwitchToEventPlaylistAction():
             for pc in playback_controllers:
                 if not isinstance(pc, SpotifyDbusPlaybackController):
                     continue
 
-                if pl := game.playlist:
+                if pl := event.playlist:
                     pc.open_uri(pl.uri)
 
-        case AnnounceGameAction():
-            if (pl := game.playlist) and (af := pl.announcement_file):
+        case AnnounceEventAction():
+            if (pl := event.playlist) and (af := pl.announcement_file):
                 util.play_audiofile(af)
 
         case _:
@@ -122,7 +122,7 @@ def execute_action(
 def execute_actiongroup(
     actiongroup: ActionGroup,
     jingle: Jingle,
-    game: Game,
+    event: Event,
     playback_controllers: Iterable[PlaybackController],
     skip_trailing_delay: bool = True,
 ):
@@ -132,4 +132,4 @@ def execute_actiongroup(
         if skip_trailing_delay and idx == trail_idx and isinstance(action, DelayAction):
             break
 
-        execute_action(action, jingle, game, playback_controllers)
+        execute_action(action, jingle, event, playback_controllers)

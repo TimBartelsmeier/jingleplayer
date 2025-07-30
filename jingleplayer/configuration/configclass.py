@@ -12,9 +12,9 @@ from .actions import (
     Action,
     PausePlaybackAction,
     ResumePlaybackAction,
-    SwitchToGamePlaylistAction,
+    SwitchToEventPlaylistAction,
 )
-from .games import Game
+from .events import Event
 from .jingles import Jingle
 from .playlists import SpotifyPlaylist
 
@@ -58,7 +58,7 @@ def _validate_against_schema(cfg_json):
 @dataclass
 class Config:
     jingles: dict[str, Jingle]
-    games: dict[str, Game]
+    events: dict[str, Event]
     playlists: dict[str, SpotifyPlaylist]
 
     def has_action(self, *actionTypes: type[Action]):
@@ -77,7 +77,7 @@ class Config:
 
     @property
     def needs_spotify_dbus(self):
-        return self.has_action(SwitchToGamePlaylistAction)
+        return self.has_action(SwitchToEventPlaylistAction)
 
     @classmethod
     def load(cls, path: str):
@@ -117,15 +117,15 @@ class Config:
                 default_delay=default_delay,
             )
 
-        # Parse Games
-        logger.debug("Parsing games")
-        games = {}
-        for name, game_obj in cfg_json["games"].items():
-            logger.debug(f'Parsing game "{name}"')
-            games[name] = Game.from_json_obj(
+        # Parse Events
+        logger.debug("Parsing events")
+        events = {}
+        for name, event_obj in cfg_json["events"].items():
+            logger.debug(f'Parsing event "{name}"')
+            events[name] = Event.from_json_obj(
                 name,
-                game_obj,
-                known_games=games,
+                event_obj,
+                known_events=events,
                 playlists=playlists,
                 root_dir=root_dir,
             )
@@ -133,6 +133,6 @@ class Config:
         logger.debug("Finished parsing config")
         return cls(
             jingles=jingles,
-            games=games,
+            events=events,
             playlists=playlists,
         )

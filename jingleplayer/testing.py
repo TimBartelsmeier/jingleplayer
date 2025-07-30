@@ -7,9 +7,9 @@ from collections.abc import Iterable
 from jingleplayer import util
 from jingleplayer.configuration import Config
 from jingleplayer.configuration.actions import (
-    AnnounceGameAction,
-    AnnounceGamePlaylistAction,
-    SwitchToGamePlaylistAction,
+    AnnounceEventAction,
+    AnnounceEventPlaylistAction,
+    SwitchToEventPlaylistAction,
 )
 from jingleplayer.playback_control import PlaybackController
 
@@ -26,9 +26,9 @@ def test_config(cfg: Config, play_audio: bool):
     trmwidth, _ = shutil.get_terminal_size()
     linehalf = "-" * math.ceil(trmwidth / 2)
 
-    has_game_announce = cfg.has_action(AnnounceGameAction)
-    has_pl_announce = cfg.has_action(AnnounceGamePlaylistAction)
-    has_pl_switch = cfg.has_action(SwitchToGamePlaylistAction)
+    has_event_announce = cfg.has_action(AnnounceEventAction)
+    has_pl_announce = cfg.has_action(AnnounceEventPlaylistAction)
+    has_pl_switch = cfg.has_action(SwitchToEventPlaylistAction)
 
     if play_audio:
         print("Config Info & Audio File Test")
@@ -37,27 +37,27 @@ def test_config(cfg: Config, play_audio: bool):
     print(linehalf)
     print()
 
-    # Games
-    print("Games:")
+    # Events:
+    print("Events:")
     print(linehalf)
 
-    if len(cfg.games) > 0:
+    if len(cfg.events) > 0:
         print()
 
-        for e in cfg.games.values():
+        for e in cfg.events.values():
             print(
                 e.get_info_str(
-                    warn_if_no_announcement=has_game_announce,
+                    warn_if_no_announcement=has_event_announce,
                     warn_if_no_playlist=has_pl_switch,
                 )
             )
 
             if play_audio and (af := e.announcement_file):
-                _playaudio_and_delay(af, "game announcement")
+                _playaudio_and_delay(af, "event announcement")
 
             print()
     else:
-        print("<No games configured.>")
+        print("<No events configured.>")
 
     print()
 

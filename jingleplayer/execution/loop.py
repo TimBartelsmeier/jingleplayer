@@ -9,14 +9,14 @@ from jingleplayer.configuration import Config
 from jingleplayer.playback_control import PlaybackController
 
 from .actions import execute_actiongroup
-from .tasks import GameJingleTask, get_tasks
+from .tasks import EventJingleTask, get_tasks
 
 logger = logging.getLogger(__name__)
 
 
-def _run_task(task: GameJingleTask, pcs: Iterable[PlaybackController]):
+def _run_task(task: EventJingleTask, pcs: Iterable[PlaybackController]):
     j = task.jingle
-    e = task.game
+    e = task.event
 
     logger.info("Waiting for jingle pre_action trigger time")
     util.wait_until(task.start)
@@ -49,17 +49,17 @@ def schedule_and_run_jingles(
 
         if t.start < now:
             logger.info(
-                f'Skipping jingle "{t.jingle.name}" for game "{t.game.name}": start time {t.start} has already passed (now: {now})'
+                f'Skipping jingle "{t.jingle.name}" for event "{t.event.name}": start time {t.start} has already passed (now: {now})'
             )
             print(
-                f'Skipping jingle "{t.jingle.name}" for game "{t.game.name}": start time has already passed {humanize.naturaltime(now - t.start)}'
+                f'Skipping jingle "{t.jingle.name}" for event "{t.event.name}": start time has already passed {humanize.naturaltime(now - t.start)}'
             )
             print()
             continue
 
-        logger.info(f'Next: jingle "{t.jingle.name}" for game "{t.game.name}"')
+        logger.info(f'Next: jingle "{t.jingle.name}" for event "{t.event.name}"')
         print(
-            f'Next: jingle "{t.jingle.name}" for game "{t.game.name}" (trigger is in {humanize.naturaldelta(t.action_start - now)})'
+            f'Next: jingle "{t.jingle.name}" for event "{t.event.name}" (trigger is in {humanize.naturaldelta(t.action_start - now)})'
         )
 
         _run_task(t, playback_controllers)

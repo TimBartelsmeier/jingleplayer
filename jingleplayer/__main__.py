@@ -31,14 +31,14 @@ def _parse_args():
         "--info",
         "-i",
         action="store_true",
-        help="Show information about the provided configuration; i.e. list all games, jingles, and playlists in the specified configuration and how they are set up.",
+        help="Show information about the provided configuration; i.e. list all events, jingles, and playlists in the specified configuration and how they are set up.",
     )
 
     parser.add_argument(
         "--testaudio",
         "-ta",
         action="store_true",
-        help='Shows the same information as --info and, in addition, plays all configured audio files (jingles, game/playlist announcements). You can use this to test whether they are set up correctly (correct files, matching volume, ...). After each audio file, there will be a short delay to ensure the files don\'t "blend into each other".',
+        help='Shows the same information as --info and, in addition, plays all configured audio files (jingles, event/playlist announcements). You can use this to test whether they are set up correctly (correct files, matching volume, ...). After each audio file, there will be a short delay to ensure the files don\'t "blend into each other".',
     )
 
     parser.add_argument(

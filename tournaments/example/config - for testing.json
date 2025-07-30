@@ -11,8 +11,8 @@
             "announcement_file": "../example/announce playlist2.mp3"
         }
     },
-    "games": {
-        "Past game": {
+    "events": {
+        "Past event": {
             "start": {
                 "relative_to": "NOW",
                 "offset": "-5m"
@@ -20,7 +20,7 @@
             "duration": "30s",
             "playlist": "Global Top 50"
         },
-        "Running Game": {
+        "Running Event": {
             "start": {
                 "relative_to": "NOW",
                 "offset": "-20s"
@@ -28,30 +28,30 @@
             "duration": "30s",
             "playlist": "Global Top 50"
         },
-        "Future Game": {
+        "Future Event": {
             "start": {
-                "relative_to": "END OF GAME: Running Game",
+                "relative_to": "END OF EVENT: Running Event",
                 "offset": "10s"
             },
             "duration": "30s",
-            "announcement_file": "../example/announce game.mp3",
+            "announcement_file": "../example/announce event.mp3",
             "playlist": "Germany Top 50"
         }
     },
     "jingles": {
         "Start": {
             "audio_file": "../example/jingle start.mp3",
-            "trigger": "game_start",
-            "actions": "play jingle; wait 2s; switch to game playlist"
+            "trigger": "event_start",
+            "actions": "play jingle; wait 2s; switch to event playlist"
         },
         "5s left": {
             "audio_file": "../example/jingle 5s left.mp3",
-            "trigger": "game_end",
+            "trigger": "event_end",
             "offset": "-5s"
         },
         "Stop": {
             "audio_file": "../example/jingle stop.mp3",
-            "trigger": "game_end"
+            "trigger": "event_end"
         }
     }
 }

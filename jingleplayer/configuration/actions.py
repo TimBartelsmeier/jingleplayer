@@ -49,19 +49,19 @@ class PlayJingleAction(ActionBase):
         return "play jingle"
 
 
-class AnnounceGameAction(ActionBase):
+class AnnounceEventAction(ActionBase):
     def get_description_str(self):
-        return "announce game"
+        return "announce event"
 
 
-class SwitchToGamePlaylistAction(ActionBase):
+class SwitchToEventPlaylistAction(ActionBase):
     def get_description_str(self):
-        return "switch to game playlist"
+        return "switch to event playlist"
 
 
-class AnnounceGamePlaylistAction(ActionBase):
+class AnnounceEventPlaylistAction(ActionBase):
     def get_description_str(self):
-        return "announce game playlist"
+        return "announce event playlist"
 
 
 type Action = (
@@ -70,9 +70,9 @@ type Action = (
     | PausePlaybackAction
     | ResumePlaybackAction
     | PlayJingleAction
-    | AnnounceGameAction
-    | SwitchToGamePlaylistAction
-    | AnnounceGamePlaylistAction
+    | AnnounceEventAction
+    | SwitchToEventPlaylistAction
+    | AnnounceEventPlaylistAction
 )
 
 
@@ -116,14 +116,14 @@ def parse_action_str(s: str) -> Action:
         case "play jingle":
             return PlayJingleAction()
 
-        case "announce game":
-            return AnnounceGameAction()
+        case "announce event":
+            return AnnounceEventAction()
 
-        case "switch to game playlist":
-            return SwitchToGamePlaylistAction()
+        case "switch to event playlist":
+            return SwitchToEventPlaylistAction()
 
-        case "announce game playlist":
-            return AnnounceGamePlaylistAction()
+        case "announce event playlist":
+            return AnnounceEventPlaylistAction()
 
         case _:
             raise ValueError(f'Unknown action specification: "{s}"')

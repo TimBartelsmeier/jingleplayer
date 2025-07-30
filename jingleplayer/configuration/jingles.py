@@ -21,15 +21,15 @@ logger = logging.getLogger(__name__)
 
 
 class JingleTrigger(StrEnum):
-    GAME_START = auto()
-    GAME_END = auto()
+    EVENT_START = auto()
+    EVENT_END = auto()
 
     def description_str(self):
         match self:
-            case JingleTrigger.GAME_START:
-                return "start of each game"
-            case JingleTrigger.GAME_END:
-                return "end of each game"
+            case JingleTrigger.EVENT_START:
+                return "start of each event"
+            case JingleTrigger.EVENT_END:
+                return "end of each event"
 
 
 @dataclass

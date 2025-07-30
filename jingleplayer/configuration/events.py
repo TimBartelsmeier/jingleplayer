@@ -14,23 +14,23 @@ from .playlists import SpotifyPlaylist
 logger = logging.getLogger(__name__)
 
 
-def _parse_relative_dt(d: dict, known_games: dict[str, Game]):
+def _parse_relative_dt(d: dict, known_events: dict[str, Event]):
     rel_str: str = d["relative_to"]
 
     if rel_str == "NOW":
         rel_dt = util.RELATIVE_TO_NOW_BASE
-    elif rel_str.startswith("END OF GAME: "):
-        game_id = rel_str.removeprefix("END OF GAME: ")
+    elif rel_str.startswith("END OF EVENT: "):
+        event_id = rel_str.removeprefix("END OF EVENT: ")
         try:
-            rel_dt = known_games[game_id].end
+            rel_dt = known_events[event_id].end
         except KeyError as ke:
-            raise ValueError(f'Game "{game_id}" does not exist') from ke
-    elif rel_str.startswith("START OF GAME: "):
-        game_id = rel_str.removeprefix("START OF GAME: ")
+            raise ValueError(f'Event "{event_id}" does not exist') from ke
+    elif rel_str.startswith("START OF EVENT: "):
+        event_id = rel_str.removeprefix("START OF EVENT: ")
         try:
-            rel_dt = known_games[game_id].start
+            rel_dt = known_events[event_id].start
         except KeyError as ke:
-            raise ValueError(f'Game "{game_id}" does not exist') from ke
+            raise ValueError(f'Event "{event_id}" does not exist') from ke
     else:
         raise ValueError(f'Value "{rel_str}" is not valid for relative_to')
 
@@ -44,17 +44,17 @@ def _parse_relative_dt(d: dict, known_games: dict[str, Game]):
     return dt
 
 
-def _parse_dt(obj: object, games: dict[str, Game]):
+def _parse_dt(obj: object, events: dict[str, Event]):
     if isinstance(obj, str):
         return util.parse_datetime_str(obj)
     elif isinstance(obj, dict):
-        return _parse_relative_dt(obj, games)
+        return _parse_relative_dt(obj, events)
 
     raise ValueError("Unknown datetime specification")
 
 
 @dataclass
-class Game:
+class Event:
     name: str
 
     start: datetime
@@ -66,7 +66,7 @@ class Game:
 
     def __post_init__(self):
         if self.start > self.end:
-            raise ValueError(f"start of game {self.name} is later than the end.")
+            raise ValueError(f"start of event {self.name} is later than the end.")
 
         if self.announcement_file is not None:
             if not self.announcement_file.is_file():
@@ -83,7 +83,7 @@ class Game:
         warn_if_no_announcement: bool = False,
         warn_if_no_playlist: bool = False,
     ):
-        lines = util.get_info_string_header("Game", self.name)
+        lines = util.get_info_string_header("Event", self.name)
 
         lines.append(f"- Start: {util.format_datetime(self.start)}")
         lines.append(f"- End: {util.format_datetime(self.end)}")
@@ -98,14 +98,14 @@ class Game:
             )
         elif warn_if_no_announcement:
             lines.append(
-                '- WARNING: at least one jingle has the "announce game" action configured, but this game has no announcement file. It will therefore not be announced.'
+                '- WARNING: at least one jingle has the "announce event" action configured, but this event has no announcement file. It will therefore not be announced.'
             )
 
         if self.playlist:
-            lines.append(f"- Game playlist: {self.playlist.name}")
+            lines.append(f"- Event playlist: {self.playlist.name}")
         elif warn_if_no_playlist:
             lines.append(
-                '- WARNING: at least one jingle has the "switch to game playlist" action configured, but this game has no playlist. The playlist will be left unchanged.'
+                '- WARNING: at least one jingle has the "switch to event playlist" action configured, but this event has no playlist. The playlist will be left unchanged.'
             )
 
         return util.lines_to_string(lines)
@@ -115,23 +115,23 @@ class Game:
         cls,
         name: str,
         obj: dict,
-        known_games: dict[str, Game],
+        known_events: dict[str, Event],
         playlists: dict[str, SpotifyPlaylist],
         root_dir: pathlib.Path,
     ):
-        start = _parse_dt(obj["start"], known_games)
+        start = _parse_dt(obj["start"], known_events)
 
         if (end_str := obj.get("end", None)) is not None:
-            end = _parse_dt(end_str, known_games)
+            end = _parse_dt(end_str, known_events)
 
             if start >= end:
-                raise ValueError("Start of game must be before its end")
+                raise ValueError("Start of event must be before its end")
 
         elif (dur_str := obj.get("duration", None)) is not None:
             dur = util.parse_timedelta_str(dur_str)
             end = start + dur
         else:
-            raise RuntimeError("Either end or duration must be set on game")
+            raise RuntimeError("Either end or duration must be set on event")
 
         announcement_file = None
         if ann_file_str := obj.get("announcement_file", None):
@@ -159,6 +159,6 @@ class Game:
             if g.playlist is None
             else f'playlist: "{g.playlist.name}"'
         )
-        logger.info(f'Parsed game "{g.name}" (from {g.start} to {g.end}, {plstr})')
+        logger.info(f'Parsed event "{g.name}" (from {g.start} to {g.end}, {plstr})')
 
         return g
